@@ -158,33 +158,45 @@ func deepValueEqual(x, y reflect.Value, visited map[visit]bool, trace []string) 
 		}
 		return newUnexpected(x, y, append(trace, "FUNC"))
 	case reflect.Bool:
-		if x.Bool() != y.Bool() {
-			return newUnexpected(x, y, trace)
+		v1 := x.Bool()
+		v2 := y.Bool()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		if x.Int() != y.Int() {
-			return newUnexpected(x, y, trace)
+		v1 := x.Int()
+		v2 := y.Int()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		if x.Uint() != y.Uint() {
-			return newUnexpected(x, y, trace)
+		v1 := x.Uint()
+		v2 := y.Uint()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	case reflect.Float32, reflect.Float64:
-		if x.Float() != y.Float() {
-			return newUnexpected(x, y, trace)
+		v1 := x.Float()
+		v2 := y.Float()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	case reflect.Complex64, reflect.Complex128:
-		if x.Complex() != y.Complex() {
-			return newUnexpected(x, y, trace)
+		v1 := x.Complex()
+		v2 := y.Complex()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	case reflect.String:
-		if x.String() != y.String() {
-			return newUnexpected(x, y, trace)
+		v1 := x.String()
+		v2 := y.String()
+		if v1 != v2 {
+			return newUnexpected(v1, v2, trace)
 		}
 		return expected
 	default:
