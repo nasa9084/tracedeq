@@ -119,7 +119,7 @@ func deepValueEqual(x, y reflect.Value, visited map[visit]bool, trace []string) 
 	case reflect.Struct:
 		for i := 0; i < x.NumField(); i++ {
 			if x.Field(i).IsZero() != y.Field(i).IsZero() {
-				return newUnexpected(x, y, append(trace, x.Type().Field(i).Name))
+				return newUnexpected(x.Field(i), y.Field(i), append(trace, x.Type().Field(i).Name))
 			}
 			if x.Field(i).IsZero() && y.Field(i).IsZero() {
 				continue
