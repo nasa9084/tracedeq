@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+const (
+	TagKey         = "tracedeq"
+	IgnoreTagValue = "ignore"
+)
+
 type Result struct {
 	IsEqual bool
 	Trace   Trace
@@ -118,6 +123,9 @@ func deepValueEqual(x, y reflect.Value, visited map[visit]bool, trace []string) 
 		return deepValueEqual(x.Elem(), y.Elem(), visited, trace)
 	case reflect.Struct:
 		for i := 0; i < x.NumField(); i++ {
+			if shouldIgnore(x.Type().Field(i), y.Type().Field(i)) {
+				continue
+			}
 			if x.Field(i).IsZero() != y.Field(i).IsZero() {
 				return newUnexpected(x.Field(i), y.Field(i), append(trace, x.Type().Field(i).Name))
 			}
@@ -217,4 +225,24 @@ func newUnexpected(x, y interface{}, trace []string) Result {
 
 func newUnexpectedLengthResult(x, y reflect.Value, trace []string) Result {
 	return newUnexpected(x.Len(), y.Len(), append(trace, "LENGTH"))
+}
+
+func shouldIgnore(x, y reflect.StructField) bool {
+	xTags := strings.Split(x.Tag.Get(TagKey), ",")
+
+	for _, tag := range xTags {
+		if tag == IgnoreTagValue {
+			return true
+		}
+	}
+
+	yTags := strings.Split(x.Tag.Get(TagKey), ",")
+
+	for _, tag := range yTags {
+		if tag == IgnoreTagValue {
+			return true
+		}
+	}
+
+	return false
 }
